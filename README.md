@@ -1,2 +1,2 @@
-# dsc-assignment
-hk222
+# Discrete Structures for Computing - HK222
+Assignment

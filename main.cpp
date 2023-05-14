@@ -11,13 +11,11 @@ int main ()
         string prefix  = Infix2Prefix(expression);
         cout << "Postfix: "    << postfix << endl;
         cout << "Prefix: "     << prefix << endl;
-        cout << "Evaluation: " << PostfixPrefixCalculator("1 +2 +") << endl;
+        cout << "Evaluation: " << PostfixPrefixCalculator(postfix) << endl;
         cout << "Evaluation: " << PostfixPrefixCalculator(prefix) << endl;
     }
     catch (const runtime_error & error) 
-    {
-        cout << "Error: " << error.what() << endl;
-    }
+    { cout << "Error: " << error.what() << endl; }
 
     return 0;
 }

@@ -8,7 +8,7 @@ string Infix2Postfix(const string & expression)
 
     stack <char> operatorStack; string postfix = "";
     for (size_t i = 0; i < expression.length(); i++) 
-    {
+    {   
         char c = expression[i];
         if (isdigit(c))
         {
@@ -117,11 +117,11 @@ double performOperation(double op1, double op2, char op)
         case '*': return op1 * op2;
         case '/':
             if (op2 == 0)
-                throw std::runtime_error("Divided-by-0");
+                throw runtime_error("Divided-by-0");
             return op1 / op2;
         case '^':
             if (op1 == 0 && op2 == 0)
-                throw std::runtime_error("Undefined");
+                throw runtime_error("Undefined");
             return pow(op1, op2);
     }
     return -1;

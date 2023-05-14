@@ -48,16 +48,22 @@ int getPrecedence(char op)
 void checkInfixValidity(string expression) 
 {
     // Check for consecutive operators
+    // for (size_t i = 0; i < expression.length() - 2; i++)
+    //     if (isOperator(expression[i]) && isOperator(expression[i+1]) && isOperator(expression[i+2]))
+    //         throw runtime_error("Undefined error");
+            
     for (size_t i = 0; i < expression.length() - 1; i++)
-        if (isOperator(expression[i]) && isOperator(expression[i+1]) && expression[i] != '-' && expression[i+1] != '-')
-            throw std::runtime_error("Undefined error");
+        if ((isOperator (expression[i]) && isOperator(expression[i+1]))    && 
+                        (expression[i]   != '+' && expression[i]   != '-') &&
+                        (expression[i+1] != '+' && expression[i+1] != '-') )
+            throw runtime_error("Undefined error");
 
 
     // Check for precedence order
     for (size_t i = 0; i < expression.length() - 1; i++)
         if (isOperator(expression[i]) && isOperator(expression[i+1]) && expression[i] != '-' && expression[i+1] != '-')
             if (getPrecedence(expression[i]) < getPrecedence(expression[i+1])) 
-                throw std::runtime_error("Multiple-output error");
+                throw runtime_error("Multiple-output error");
 
 
     // Check for parenthesis
@@ -69,19 +75,19 @@ void checkInfixValidity(string expression)
         else if (expression[i] == ')')  
             closeCount++;
         if (closeCount > openCount)
-            throw std::runtime_error("Syntax error");
+            throw runtime_error("Syntax error");
     }
     if (openCount != closeCount)
-        throw std::runtime_error("Syntax error");
+        throw runtime_error("Syntax error");
 
     // Check for floating point errors
     for (size_t i = 0; i < expression.length() - 1; i++) 
     {
         if (expression[i] == '.' && expression[i+1] == '.')
-            throw std::runtime_error("Syntax error");
+            throw runtime_error("Syntax error");
         
         if (expression[i] == '+' && expression[i+1] == '.')
-            throw std::runtime_error("Syntax error");
+            throw runtime_error("Syntax error");
     }
     return;
 }

@@ -1,2 +1,2 @@
-# Discrete Structures for Computing - HK222
-Assignment
+# Discrete Structures for Computing
+Assignment - HK222

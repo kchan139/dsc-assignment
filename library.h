@@ -31,19 +31,19 @@ int getPrecedence(char op)
     }
 }
 
-bool isLogicOperator(char c) 
-{ return c == '&' || c == '|' || c == '!'; }
+// bool isLogicOperator(char c) 
+// { return c == '&' || c == '|' || c == '!'; }
 
-int getLogicPrecedence(char op) 
-{
-    switch (op) 
-    {
-        case '|': return 1;
-        case '&': return 2;
-        case '!': return 3;
-        default : return 0;
-    }
-}
+// int getLogicPrecedence(char op) 
+// {
+//     switch (op) 
+//     {
+//         case '|': return 1;
+//         case '&': return 2;
+//         case '!': return 3;
+//         default : return 0;
+//     }
+// }
 
 void checkInfixValidity(string expression) 
 {

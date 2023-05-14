@@ -53,9 +53,7 @@ void checkInfixValidity(string expression)
     //         throw runtime_error("Undefined error");
             
     for (size_t i = 0; i < expression.length() - 1; i++)
-        if ((isOperator (expression[i]) && isOperator(expression[i+1]))    && 
-                        (expression[i]   != '+' && expression[i]   != '-') &&
-                        (expression[i+1] != '+' && expression[i+1] != '-') )
+        if (isOperator(expression[i]) && isOperator(expression[i+1]) && expression[i] != '-' && expression[i+1] != '-')
             throw runtime_error("Undefined error");
 
 

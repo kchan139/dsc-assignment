@@ -18,6 +18,9 @@ using namespace std;
 bool isOperator(char c)
 { return c == '+' || c == '-' || c == '*' || c == '/' || c == '^'; }
 
+bool isLogicOperator(char c) 
+{ return (c == '&' || c == '|' || c=='-' || c=='<'); }
+
 int getPrecedence(char op) 
 {
     switch (op) 
@@ -31,19 +34,19 @@ int getPrecedence(char op)
     }
 }
 
-// bool isLogicOperator(char c) 
-// { return c == '&' || c == '|' || c == '!'; }
+int getLogicPrecedence(string op) 
+{
+    if (op == "~")
+        return 3;
+    if (op == "&" || op == "|") 
+        return 2;
+    if(op == "<->")
+        return 1;
+    if (op == "->")
+        return 0;
+    return -1;
+}
 
-// int getLogicPrecedence(char op) 
-// {
-//     switch (op) 
-//     {
-//         case '|': return 1;
-//         case '&': return 2;
-//         case '!': return 3;
-//         default : return 0;
-//     }
-// }
 
 void checkInfixValidity(string expression) 
 {

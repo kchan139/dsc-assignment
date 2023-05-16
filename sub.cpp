@@ -1,6 +1,10 @@
 #include "library.h"
 
+//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>//
 //<<<<<<<<<<<<<<<<<<<<<<<<<< Problem 1 >>>>>>>>>>>>>>>>>>>>>>>>>>//
+//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>//
+
+//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::://
 //============================== A ===============================//
 string Infix2Postfix(const string & expression) 
 {
@@ -50,6 +54,7 @@ string Infix2Postfix(const string & expression)
     return postfix;
 }
 
+//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::://
 //============================== B ===============================//
 string Infix2Prefix(const string & expression) 
 {
@@ -106,7 +111,7 @@ string Infix2Prefix(const string & expression)
     return prefix;
 }
 
-
+//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::://
 //============================== C ===============================//
 double performOperation(double op1, double op2, char op) 
 {
@@ -208,12 +213,214 @@ string PostfixPrefixCalculator(string expression)
 
 
 
-
+//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>//
 //<<<<<<<<<<<<<<<<<<<<<<<<<< Problem 2 >>>>>>>>>>>>>>>>>>>>>>>>>>//
+//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>//
+
+//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::://
 //============================== A ===============================//
+string LogicInfix2Postfix(string infix)  {
+    stack<string> st;
+    string postfix;
 
+    for (size_t i = 0; i < infix.size(); ++i) 
+    {
+        string op(1, infix[i]);
 
+        if(op=="<")
+        {
+            op+=infix[++i];
+            op+=infix[++i];
+        } 
+        if (op=="-") 
+            op+=infix[++i];
+        if (isalpha(op[0]))
+            postfix += op;
+        else if (op == "(")
+            st.push(op);
+        else if (op == ")") 
+        {
+            while (!st.empty() && st.top() != "(") 
+            {
+                postfix += st.top();
+                st.pop();
+            }
+            if (!st.empty()) st.pop();
+        } 
+        else 
+        {
+            if (op!=" ")
+            {
+                while (!st.empty() && getLogicPrecedence(st.top()) >= getLogicPrecedence(op)) 
+                {
+                    postfix += st.top();
+                    st.pop();
+                }
+            st.push(op);
+            }
+        }
+    }
+
+    while (!st.empty()) 
+    {
+        postfix += st.top();
+        st.pop();
+    }
+
+    return postfix;
+}
+
+//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::://
 //============================== B ===============================//
+string LogicInfix2Prefix(string infix) {
+    reverse(infix.begin(), infix.end());
+    stack<string> st;
+    string prefix;
+
+    for (size_t i = 0; i < infix.size(); ++i) {
+        string op(1, infix[i]);
+
+        if (isalpha(op[0]))
+            prefix = op + prefix;
+        else if (op == ")")
+            st.push(op);
+        else if (op == "(") 
+        {
+            while (!st.empty() && st.top() != ")") 
+            {
+                prefix = st.top() + prefix;
+                st.pop();
+            }
+            if (!st.empty())
+                st.pop();
+        } 
+        else 
+        {
+            if (op!=" ")
+            {
+                if (infix[i]=='>')
+                {
+                    if(infix[i+2]&&infix[i+2]=='<')
+                        { op="<->"; i+=2; }
+                    else 
+                        { op="->"; i++; }
+                }
+                while (!st.empty() && getLogicPrecedence(st.top()) > getLogicPrecedence(op)) 
+                {
+                    prefix = st.top() + prefix;
+                    st.pop();
+                }
+                st.push(op);
+            }
+        }
+    }
+
+    while (!st.empty()) 
+    {
+        prefix = st.top() + prefix;
+        st.pop();
+    }
+    return prefix;
+}
 
 
+//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::://
 //============================== C ===============================//
+bool performLogicOperation(bool op1, bool op2, char op) 
+{
+    switch (op) 
+    {
+        case '&': return (op1 && op2);
+        case '|': return (op1 || op2);
+        case '-': return (!op1 || op2);
+        case '<': return ((!op1 || op2) && (!op2 || op1));
+    }
+    return -1;
+}
+
+bool evaluateLogicPostfix(const string& postfix) 
+{
+    stack<bool> operands;
+    
+    for (size_t i = 0; i < postfix.size(); ++i) 
+    {
+        bool value;
+        if (postfix[i]=='1')  value=true;
+        if (postfix[i]=='0')  value=false;
+        if (postfix[i]=='~') {operands.top()=!operands.top();continue;}
+        if (isLogicOperator(postfix[i])) 
+        {
+            bool op1 = operands.top(); operands.pop();
+            bool op2 = operands.top(); operands.pop();
+            bool result = performLogicOperation(op1, op2, postfix[i]);
+            if (postfix[i]=='-')  i++;
+            if (postfix[i]== '<') i+=2;
+            operands.push(result);
+        } 
+        else  operands.push(value);
+    }
+    return operands.top();
+}
+
+bool evaluateLogicPrefix(const string& prefix) 
+{
+    stack<bool> operands;
+    
+    for (int i = prefix.size()-1; i >=0 ; i--) 
+    {
+        bool value;
+        if (prefix[i]=='1')value=true;
+        if (prefix[i]=='0')value=false;
+        if (prefix[i]=='~'){operands.top()=!operands.top();continue;}
+        if (isLogicOperator(prefix[i])) 
+        {
+            if (prefix[i]=='-')
+                if (prefix[i-1])
+                    if (prefix[i-1]=='<')
+                        i--;
+            bool op1 = operands.top(); operands.pop();
+            bool op2 = operands.top(); operands.pop();
+            bool result = performLogicOperation(op2, op1, prefix[i]);
+            operands.push(result);
+        } 
+        else if (prefix[i]!='>')
+            operands.push(value);
+    }
+    return operands.top();
+}
+
+bool isLogicPrefixExpression(const string& expression) 
+{
+    if (expression[0]=='~') return true;
+    return isLogicOperator(expression[0]);
+}
+
+string assignValue(string input, string value)
+{
+    string s = "";
+    int midpoint = value.size() / 2 + 1;
+    for (size_t i = 0; i < input.size(); ++i)
+    {
+        if (isalpha(input[i]))
+        {
+            for (size_t j=0;j<value.size();++j)
+            {
+                if (input[i]==value[j])
+                {
+                    s+=value[midpoint+j];
+                    break;
+                }
+            }
+        }else s+=input[i];
+    }
+    return s;
+}
+
+string LogicPostfixPrefixCalculator(string input, string value) 
+{
+    bool isPrefix = isLogicPrefixExpression(input);
+    bool result   = isPrefix ? 
+        evaluateLogicPrefix(assignValue(input,value)) : evaluateLogicPostfix(assignValue(input,value));
+    
+    return (result)? "TRUE" : "FALSE";
+}

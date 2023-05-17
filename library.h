@@ -51,10 +51,6 @@ int getLogicPrecedence(string op)
 void checkInfixValidity(string expression) 
 {
     // Check for consecutive operators
-    // for (size_t i = 0; i < expression.length() - 2; i++)
-    //     if (isOperator(expression[i]) && isOperator(expression[i+1]) && isOperator(expression[i+2]))
-    //         throw runtime_error("Undefined error");
-            
     for (size_t i = 0; i < expression.length() - 1; i++)
         if (isOperator(expression[i]) && isOperator(expression[i+1]) && expression[i] != '-' && expression[i+1] != '-')
             throw runtime_error("Undefined error");
@@ -92,5 +88,43 @@ void checkInfixValidity(string expression)
     }
     return;
 }
+
+void checkLogicInfixValidity(string expression) 
+{
+    // Check for consecutive operators
+    for (size_t i = 0; i < expression.length() - 1; i++)
+        if (isLogicOperator(expression[i]) && isLogicOperator(expression[i+1]))
+            throw runtime_error("Consecutive operators");
+
+    // Check for precedence order
+    for (size_t i = 0; i < expression.length() - 1; i++)
+    {
+        if (isLogicOperator(expression[i]) && isLogicOperator(expression[i+1]))
+        {
+            string currentOperator = string(1, expression[i]);
+            string nextOperator = string(1, expression[i+1]);
+
+            if (getLogicPrecedence(currentOperator) < getLogicPrecedence(nextOperator)) 
+                throw runtime_error("Incorrect precedence order");
+        }
+    }
+
+    // Check for parenthesis
+    int openCount = 0, closeCount = 0;
+    for (size_t i = 0; i < expression.length(); i++) 
+    {
+        if (expression[i] == '(')       
+            openCount++;
+        else if (expression[i] == ')')  
+            closeCount++;
+        if (closeCount > openCount)
+            throw runtime_error("Mismatched parentheses");
+    }
+    if (openCount != closeCount)
+        throw runtime_error("Mismatched parentheses");
+
+    return;
+}
+
 
 #endif

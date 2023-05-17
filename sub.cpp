@@ -1,16 +1,17 @@
 #include "library.h"
 
-//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>//
-//<<<<<<<<<<<<<<<<<<<<<<<<<< Problem 1 >>>>>>>>>>>>>>>>>>>>>>>>>>//
-//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>//
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%//
+//<<<<<<<<<<<<<<<<<<<<<<<<<< PROBLEM 1 >>>>>>>>>>>>>>>>>>>>>>>>>>//
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%//
 
-//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::://
+//================================================================//
 //============================== A ===============================//
 string Infix2Postfix(const string & expression) 
 {
     checkInfixValidity(expression);
 
     stack <char> operatorStack; string postfix = "";
+
     for (size_t i = 0; i < expression.length(); i++) 
     {   
         char c = expression[i];
@@ -54,16 +55,16 @@ string Infix2Postfix(const string & expression)
     return postfix;
 }
 
-//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::://
+//================================================================//
 //============================== B ===============================//
 string Infix2Prefix(const string & expression) 
 {
     checkInfixValidity(expression);
 
     stack <char> operatorStack;
-    string prefix = "";
-    string reversedExpr = expression;
-    reverse(reversedExpr.begin(), reversedExpr.end());
+    string       prefix = "";
+    string       reversedExpr = expression;
+    reverse (reversedExpr.begin(), reversedExpr.end());
 
     for (size_t i = 0; i < reversedExpr.length(); i++) 
     {
@@ -111,7 +112,7 @@ string Infix2Prefix(const string & expression)
     return prefix;
 }
 
-//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::://
+//================================================================//
 //============================== C ===============================//
 double performOperation(double op1, double op2, char op) 
 {
@@ -154,11 +155,11 @@ double evaluatePostfix(const string & postfix)
 
 double evaluatePrefix(const string & prefix) 
 {
-    stack<double> operands;
-    stringstream ss(prefix);
+    stack <double> operands;
+    stringstream   ss(prefix);
 
     istream_iterator <string> begin(ss), end;
-    vector <string> tokens(begin, end);
+    vector           <string> tokens(begin, end);
 
     for (auto it = tokens.rbegin(); it != tokens.rend(); ++it) 
     {
@@ -213,15 +214,17 @@ string PostfixPrefixCalculator(string expression)
 
 
 
-//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>//
-//<<<<<<<<<<<<<<<<<<<<<<<<<< Problem 2 >>>>>>>>>>>>>>>>>>>>>>>>>>//
-//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>//
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%//
+//<<<<<<<<<<<<<<<<<<<<<<<<<< PROBLEM 2 >>>>>>>>>>>>>>>>>>>>>>>>>>//
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%//
 
-//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::://
+//================================================================//
 //============================== A ===============================//
-string LogicInfix2Postfix(string infix)  {
-    stack<string> st;
-    string postfix;
+string LogicInfix2Postfix (string infix)  
+{
+    checkLogicInfixValidity(infix);
+
+    stack <string> st; string postfix;
 
     for (size_t i = 0; i < infix.size(); ++i) 
     {
@@ -260,22 +263,22 @@ string LogicInfix2Postfix(string infix)  {
             }
         }
     }
-
     while (!st.empty()) 
     {
         postfix += st.top();
         st.pop();
     }
-
     return postfix;
 }
 
-//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::://
+//================================================================//
 //============================== B ===============================//
-string LogicInfix2Prefix(string infix) {
+string LogicInfix2Prefix (string infix) 
+{
+    checkLogicInfixValidity(infix);
+
     reverse(infix.begin(), infix.end());
-    stack<string> st;
-    string prefix;
+    stack <string> st; string prefix;
 
     for (size_t i = 0; i < infix.size(); ++i) {
         string op(1, infix[i]);
@@ -324,9 +327,9 @@ string LogicInfix2Prefix(string infix) {
 }
 
 
-//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::://
+//================================================================//
 //============================== C ===============================//
-bool performLogicOperation(bool op1, bool op2, char op) 
+bool performLogicOperation (bool op1, bool op2, char op) 
 {
     switch (op) 
     {
@@ -338,9 +341,9 @@ bool performLogicOperation(bool op1, bool op2, char op)
     return -1;
 }
 
-bool evaluateLogicPostfix(const string& postfix) 
+bool evaluateLogicPostfix (const string & postfix) 
 {
-    stack<bool> operands;
+    stack <bool> operands;
     
     for (size_t i = 0; i < postfix.size(); ++i) 
     {
@@ -362,7 +365,7 @@ bool evaluateLogicPostfix(const string& postfix)
     return operands.top();
 }
 
-bool evaluateLogicPrefix(const string& prefix) 
+bool evaluateLogicPrefix (const string & prefix) 
 {
     stack<bool> operands;
     
@@ -389,13 +392,13 @@ bool evaluateLogicPrefix(const string& prefix)
     return operands.top();
 }
 
-bool isLogicPrefixExpression(const string& expression) 
+bool isLogicPrefixExpression (const string& expression) 
 {
     if (expression[0]=='~') return true;
     return isLogicOperator(expression[0]);
 }
 
-string assignValue(string input, string value)
+string assignValue (string input, string value)
 {
     string s = "";
     int midpoint = value.size() / 2 + 1;
@@ -418,8 +421,8 @@ string assignValue(string input, string value)
 
 string LogicPostfixPrefixCalculator(string input, string value) 
 {
-    bool isPrefix = isLogicPrefixExpression(input);
-    bool result   = isPrefix ? 
+    // if the expression is prefix then call evaluateLogicPrefix, otherwise call evaluateLogicPostfix
+    bool result   = isLogicPrefixExpression(input) ? 
         evaluateLogicPrefix(assignValue(input,value)) : evaluateLogicPostfix(assignValue(input,value));
     
     return (result)? "TRUE" : "FALSE";

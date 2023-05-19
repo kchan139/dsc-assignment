@@ -141,7 +141,7 @@ double evaluatePostfix(const string & postfix)
 
     while (ss >> token) 
     {
-        if (isOperator(token[0])&&(!token[1]&&!isdigit(token[1]))) 
+        if ( isOperator(token[0]) && (!token[1] && !isdigit(token[1])) ) 
         {
             double op2 = operands.top(); operands.pop();
             double op1 = operands.top(); operands.pop();

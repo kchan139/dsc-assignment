@@ -12,6 +12,7 @@
 #include <cmath>
 #include <iomanip>
 #include <unordered_map>
+#include <unordered_set>
 
 using namespace std;
 
@@ -91,39 +92,55 @@ void checkInfixValidity(string expression)
 
 void checkLogicInfixValidity(string expression) 
 {
-    // Check for consecutive operators
-    for (size_t i = 0; i < expression.length() - 1; i++)
-        if (isLogicOperator(expression[i]) && isLogicOperator(expression[i+1]))
-            throw runtime_error("Consecutive operators");
+    // // Check for consecutive operators
+    // for (size_t i = 0; i < expression.length() - 1; i++)
+    //     if (isLogicOperator(expression[i]) && isLogicOperator(expression[i+1]))
+    //         throw runtime_error("Consecutive operators");
 
-    // Check for precedence order
-    for (size_t i = 0; i < expression.length() - 1; i++)
-    {
-        if (isLogicOperator(expression[i]) && isLogicOperator(expression[i+1]))
-        {
-            string currentOperator = string(1, expression[i]);
-            string nextOperator = string(1, expression[i+1]);
+    // // Check for precedence order
+    // for (size_t i = 0; i < expression.length() - 1; i++)
+    // {
+    //     if (isLogicOperator(expression[i]) && isLogicOperator(expression[i+1]))
+    //     {
+    //         string currentOperator = string(1, expression[i]);
+    //         string nextOperator = string(1, expression[i+1]);
 
-            if (getLogicPrecedence(currentOperator) < getLogicPrecedence(nextOperator)) 
-                throw runtime_error("Incorrect precedence order");
-        }
-    }
+    //         if (getLogicPrecedence(currentOperator) < getLogicPrecedence(nextOperator)) 
+    //             throw runtime_error("Incorrect precedence order");
+    //     }
+    // }
 
-    // Check for parenthesis
-    int openCount = 0, closeCount = 0;
-    for (size_t i = 0; i < expression.length(); i++) 
-    {
-        if (expression[i] == '(')       
-            openCount++;
-        else if (expression[i] == ')')  
-            closeCount++;
-        if (closeCount > openCount)
-            throw runtime_error("Mismatched parentheses");
-    }
-    if (openCount != closeCount)
-        throw runtime_error("Mismatched parentheses");
+    // // Check for parenthesis
+    // int openCount = 0, closeCount = 0;
+    // for (size_t i = 0; i < expression.length(); i++) 
+    // {
+    //     if (expression[i] == '(')       
+    //         openCount++;
+    //     else if (expression[i] == ')')  
+    //         closeCount++;
+    //     if (closeCount > openCount)
+    //         throw runtime_error("Mismatched parentheses");
+    // }
+    // if (openCount != closeCount)
+    //     throw runtime_error("Mismatched parentheses");
 
     return;
+}
+
+void checkVariablesValidity (string expression, string variables)
+{
+    unordered_set <char> chars (expression.begin(), expression.end());
+
+    for (char c : chars) // Check if variables match with expression
+    {
+        if (!std::isalpha(c)) continue;  // Skip non-letter characters
+        if ((isalpha(c) && variables.find(c) == string::npos))
+            throw runtime_error("Invalid Values"); 
+    }
+    for (char c : variables)
+        if (isalpha(c)) return;
+
+    throw runtime_error("Invalid Values"); // No variables found
 }
 
 

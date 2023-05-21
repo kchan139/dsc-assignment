@@ -140,7 +140,7 @@ double evaluatePostfix(const string & postfix)
 
     while (ss >> token) 
     {
-        if (isOperator(token[0])&&(!token[1]&&!isdigit(token[1]))) 
+        if ( isOperator(token[0]) && (!token[1] && !isdigit(token[1])) ) 
         {
             double op2 = operands.top(); operands.pop();
             double op1 = operands.top(); operands.pop();
@@ -301,8 +301,8 @@ string LogicInfix2Prefix (string infix)
             {
                 if (infix[i] == '>')
                 {
-                    if(infix[i+2] && infix[i+2] == '<')
-                        { op = "<->"; i += 2; }
+                    if(infix[i+2]&&infix[i+2]=='<')
+                        { op="<->"; i+=2; }
                     else 
                         { op = "->"; i++; }
                 }
@@ -342,20 +342,19 @@ bool performLogicOperation (bool op1, bool op2, char op)
 bool evaluateLogicPostfix (const string & postfix) 
 {
     stack <bool> operands;
-    
     for (size_t i = 0; i < postfix.size(); ++i) 
     {
         bool value;
-        if (postfix[i] == '1')   value = true;
-        if (postfix[i] == '0')   value = false;
-        if (postfix[i] == '~') { operands.top() = !operands.top(); continue; }
+        if (postfix[i]=='1')  value=true;
+        if (postfix[i]=='0')  value=false;
+        if (postfix[i]=='~') {operands.top()=!operands.top();continue;}
         if (isLogicOperator(postfix[i])) 
         {
             bool op1 = operands.top(); operands.pop();
             bool op2 = operands.top(); operands.pop();
             bool result = performLogicOperation(op1, op2, postfix[i]);
-            if (postfix[i] == '-')  i++;
-            if (postfix[i] == '<')  i += 2;
+            if (postfix[i]=='-')  i++;
+            if (postfix[i]== '<') i+=2;
             operands.push(result);
         } 
         else  operands.push(value);
@@ -367,17 +366,17 @@ bool evaluateLogicPrefix (const string & prefix)
 {
     stack<bool> operands;
     
-    for (int i = prefix.size()-1; i >= 0 ; i--) 
+    for (int i = prefix.size()-1; i >=0 ; i--) 
     {
         bool value;
-        if (prefix[i] == '1')   value = true;
-        if (prefix[i] == '0')   value = false;
-        if (prefix[i] == '~') { operands.top() = !operands.top(); continue; }
+        if (prefix[i]=='1')value=true;
+        if (prefix[i]=='0')value=false;
+        if (prefix[i]=='~'){operands.top()=!operands.top();continue;}
         if (isLogicOperator(prefix[i])) 
         {
-            if (prefix[i] == '-')
+            if (prefix[i]=='-')
                 if (prefix[i-1])
-                    if (prefix[i-1] == '<')
+                    if (prefix[i-1]=='<')
                         i--;
             bool op1 = operands.top(); operands.pop();
             bool op2 = operands.top(); operands.pop();
@@ -392,36 +391,38 @@ bool evaluateLogicPrefix (const string & prefix)
 
 bool isLogicPrefixExpression (const string& expression) 
 {
-    if (expression[0]=='~') return true;
+    if (expression[0] == '~') return true;
     return isLogicOperator(expression[0]);
 }
 
-string assignValue (string input, string value)
+string assignValue (string expression, string variables)
 {
+    checkVariablesValidity (expression, variables);
+
     string s = "";
-    int midpoint = value.size() / 2 + 1;
-    for (size_t i = 0; i < input.size(); ++i)
+    int midpoint = variables.size() / 2 + 1;
+    for (size_t i = 0; i < expression.size(); ++i)
     {
-        if (isalpha(input[i]))
+        if (isalpha(expression[i]))
         {
-            for (size_t j = 0; j < value.size(); ++j)
+            for (size_t j=0;j<value.size();++j)
             {
-                if (input[i]==value[j])
+                if (expression[i]==variables[j])
                 {
-                    s += value[midpoint+j];
+                    s+=value[midpoint+j];
                     break;
                 }
             }
-        }else s+=input[i];
+        }else s += expression[i];
     }
     return s;
 }
 
-string LogicPostfixPrefixCalculator(string input, string value) 
+string LogicPostfixPrefixCalculator(string expression, string variables) 
 {
     // if the expression is prefix then call evaluateLogicPrefix, otherwise call evaluateLogicPostfix
-    bool result   = isLogicPrefixExpression(input) ? 
-        evaluateLogicPrefix(assignValue(input,value)) : evaluateLogicPostfix(assignValue(input,value));
+    bool result   = isLogicPrefixExpression(expression) ? 
+        evaluateLogicPrefix( assignValue(expression, variables) ) : evaluateLogicPostfix( assignValue(expression, variables) );
     
     return (result)? "TRUE" : "FALSE";
 }

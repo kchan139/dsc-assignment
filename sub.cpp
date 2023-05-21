@@ -9,7 +9,6 @@
 string Infix2Postfix(const string & expression) 
 {
     checkInfixValidity(expression);
-
     stack <char> operatorStack; string postfix = "";
 
     for (size_t i = 0; i < expression.length(); i++) 
@@ -197,11 +196,11 @@ string PostfixPrefixCalculator(string expression)
     ss << fixed << setprecision(4) << result;
     string FinalResult = ss.str();
 
-    for (size_t i = FinalResult.size()-1;i>=0;i--)
+    for (size_t i = FinalResult.size()-1; i >= 0; i--)
     {
-        if (FinalResult[i]!='0' && FinalResult[i]!='.')
+        if (FinalResult[i] != '0' && FinalResult[i] != '.')
             break;
-        if (FinalResult[i]=='.')
+        if (FinalResult[i] == '.')
         {
             FinalResult.pop_back();
             break;
@@ -223,20 +222,19 @@ string PostfixPrefixCalculator(string expression)
 string LogicInfix2Postfix (string infix)  
 {
     checkLogicInfixValidity(infix);
-
     stack <string> st; string postfix;
 
     for (size_t i = 0; i < infix.size(); ++i) 
     {
         string op(1, infix[i]);
 
-        if(op=="<")
+        if(op == "<")
         {
-            op+=infix[++i];
-            op+=infix[++i];
+            op += infix[++i];
+            op += infix[++i];
         } 
-        if (op=="-") 
-            op+=infix[++i];
+        if (op == "-") 
+            op += infix[++i];
         if (isalpha(op[0]))
             postfix += op;
         else if (op == "(")
@@ -252,7 +250,7 @@ string LogicInfix2Postfix (string infix)
         } 
         else 
         {
-            if (op!=" ")
+            if (op != " ")
             {
                 while (!st.empty() && getLogicPrecedence(st.top()) >= getLogicPrecedence(op)) 
                 {
@@ -299,14 +297,14 @@ string LogicInfix2Prefix (string infix)
         } 
         else 
         {
-            if (op!=" ")
+            if (op != " ")
             {
-                if (infix[i]=='>')
+                if (infix[i] == '>')
                 {
-                    if(infix[i+2]&&infix[i+2]=='<')
-                        { op="<->"; i+=2; }
+                    if(infix[i+2] && infix[i+2] == '<')
+                        { op = "<->"; i += 2; }
                     else 
-                        { op="->"; i++; }
+                        { op = "->"; i++; }
                 }
                 while (!st.empty() && getLogicPrecedence(st.top()) > getLogicPrecedence(op)) 
                 {
@@ -348,16 +346,16 @@ bool evaluateLogicPostfix (const string & postfix)
     for (size_t i = 0; i < postfix.size(); ++i) 
     {
         bool value;
-        if (postfix[i]=='1')  value=true;
-        if (postfix[i]=='0')  value=false;
-        if (postfix[i]=='~') {operands.top()=!operands.top();continue;}
+        if (postfix[i] == '1')   value = true;
+        if (postfix[i] == '0')   value = false;
+        if (postfix[i] == '~') { operands.top() = !operands.top(); continue; }
         if (isLogicOperator(postfix[i])) 
         {
             bool op1 = operands.top(); operands.pop();
             bool op2 = operands.top(); operands.pop();
             bool result = performLogicOperation(op1, op2, postfix[i]);
-            if (postfix[i]=='-')  i++;
-            if (postfix[i]== '<') i+=2;
+            if (postfix[i] == '-')  i++;
+            if (postfix[i] == '<')  i += 2;
             operands.push(result);
         } 
         else  operands.push(value);
@@ -369,24 +367,24 @@ bool evaluateLogicPrefix (const string & prefix)
 {
     stack<bool> operands;
     
-    for (int i = prefix.size()-1; i >=0 ; i--) 
+    for (int i = prefix.size()-1; i >= 0 ; i--) 
     {
         bool value;
-        if (prefix[i]=='1')value=true;
-        if (prefix[i]=='0')value=false;
-        if (prefix[i]=='~'){operands.top()=!operands.top();continue;}
+        if (prefix[i] == '1')   value = true;
+        if (prefix[i] == '0')   value = false;
+        if (prefix[i] == '~') { operands.top() = !operands.top(); continue; }
         if (isLogicOperator(prefix[i])) 
         {
-            if (prefix[i]=='-')
+            if (prefix[i] == '-')
                 if (prefix[i-1])
-                    if (prefix[i-1]=='<')
+                    if (prefix[i-1] == '<')
                         i--;
             bool op1 = operands.top(); operands.pop();
             bool op2 = operands.top(); operands.pop();
             bool result = performLogicOperation(op2, op1, prefix[i]);
             operands.push(result);
         } 
-        else if (prefix[i]!='>')
+        else if (prefix[i] != '>')
             operands.push(value);
     }
     return operands.top();
@@ -406,11 +404,11 @@ string assignValue (string input, string value)
     {
         if (isalpha(input[i]))
         {
-            for (size_t j=0;j<value.size();++j)
+            for (size_t j = 0; j < value.size(); ++j)
             {
                 if (input[i]==value[j])
                 {
-                    s+=value[midpoint+j];
+                    s += value[midpoint+j];
                     break;
                 }
             }

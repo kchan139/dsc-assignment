@@ -1,18 +1,7 @@
 #ifndef library_h
 #define library_h
 
-#include <iostream>
-#include <string>
-#include <stack>
-#include <sstream>
-#include <math.h>
-#include <algorithm>
-#include <vector>
-#include <iterator>
-#include <cmath>
-#include <iomanip>
-#include <unordered_map>
-
+#include <bits/stdc++.h>
 using namespace std;
 
 bool isOperator(char c)

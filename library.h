@@ -41,7 +41,7 @@ int getLogicPrecedence(string op)
         return 3;
     if (op == "&" || op == "|") 
         return 2;
-    if(op == "<->")
+    if (op == "<->")
         return 1;
     if (op == "->")
         return 0;
